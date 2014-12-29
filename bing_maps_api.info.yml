@@ -1,0 +1,4 @@
+name: Bing maps api
+description: 'Provide storage and an API to bing.'
+type: module
+core: 8.x

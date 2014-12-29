@@ -1,0 +1,25 @@
+{#
+/**
+ * @file
+ * Default theme implementation for bing maps.
+ *
+ * Available variables:
+ * - description:
+ * - html_attributes:
+ * - address:.
+ *
+ * @see template_preprocess_bing_maps_api_search_item()
+ *
+ * @ingroup themeable
+ */
+#}
+<div class="name">
+  <label>{{ 'Name:'|t }}</label>
+  <span {{ html_attributes }} >{{ description }}</span>
+</div>
+{% if address %}
+<div class="address">
+  <label>{{ 'Address:'|t }}</label>
+  <span>{{ address }}</span>
+</div>
+{% endif %}

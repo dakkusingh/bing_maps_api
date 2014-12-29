@@ -1,0 +1,14 @@
+drupal.bing_maps_api:
+  version: VERSION
+  js:
+    bing_maps_api.js: {}
+  css:
+    theme:
+      bing_maps_api.css: {}
+  dependencies:
+    - core/jquery.ui.droppable
+
+drupal.bing_maps_api.external:
+  version: VERSION
+  js:
+    //ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0: { type: external }

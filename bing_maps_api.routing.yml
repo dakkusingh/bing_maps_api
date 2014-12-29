@@ -1,0 +1,7 @@
+bing_maps_api.configure:
+  path: 'admin/config/content/bing-maps'
+  defaults:
+    _form: 'Drupal\bing_maps_api\Form\ConfigurationForm'
+    _title: 'Bing maps configuration'
+  requirements:
+    _permission: 'administer bing maps'

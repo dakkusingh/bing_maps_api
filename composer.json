@@ -1,0 +1,5 @@
+{
+  "require": {
+    "fergusean/nusoap": "dev-master"
+  }
+}

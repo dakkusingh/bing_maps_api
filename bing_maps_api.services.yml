@@ -1,0 +1,4 @@
+services:
+  bing_maps_api:
+    class: Drupal\bing_maps_api\BingMapsApiSoap
+    arguments: ['@config.factory', '@http_client']

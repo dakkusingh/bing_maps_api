@@ -1,0 +1,7 @@
+bing_maps_api.configure:
+  title: Bing maps configuration
+  route_name: bing_maps_api.configure
+  parent: system.admin_config_content
+  description: 'Configure bing maps.'
+  position: left
+  weight: -20

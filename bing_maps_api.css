@@ -1,0 +1,89 @@
+/**
+ * @file
+ * Styles related to map locations.
+ */
+.bing-location-search {
+  position: relative;
+}
+
+.bing-location-search input .ajax-progress {
+  left: 420px;
+  position: absolute;
+  top: 5px;
+}
+
+#bing-map {
+  border-left: 1px solid #ddd;
+  height: 506px;
+  margin-left: 56px;
+  padding: 0;
+  position: relative;
+}
+
+/**
+ * Location results listing.
+ */
+.location-results {
+  background: #F8F7F5;
+  margin: 0;
+  max-height: 100px;
+  overflow-y: auto;
+  padding: 0;
+}
+
+.location-results li {
+  list-style-type: none;
+}
+
+.location-results label {
+  display: inline;
+  font-size: 1em;
+  margin-right: 0.3em;
+}
+
+.location-results .form-item {
+  margin-bottom: 0.5em;
+}
+
+.location-results input {
+  margin: 0;
+  width: auto;
+}
+
+.location-results .form-submit {
+  font-size: 0.88em;
+}
+
+.location-results .form-text {
+  display: inline;
+  width: 50px;
+}
+
+.location-results .form-item {
+  line-height: 2em;
+  margin-bottom: 0.5em;
+}
+
+.location-results .address {
+  margin-bottom: 0;
+}
+
+.location-results .ajax-progress {
+  position: absolute;
+  right: 109px;
+  top: 16px;
+}
+
+.location-current {
+  font-size: 18px;
+  position: relative;
+}
+
+.location-current li {
+  height: auto;
+}
+
+.location-current .ajax-progress {
+  position: absolute;
+  right: 239px;
+}

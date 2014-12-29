@@ -1,0 +1,28 @@
+bing_maps_api.settings:
+  type: mapping
+  label: 'Bing maps API settings'
+  mapping:
+    latitude:
+      type: float
+      label: 'Latitude'
+    longitude:
+      type: float
+      label: 'Longitude'
+    zoom:
+      type: integer
+      label: 'Zoom'
+    map_key:
+      type: string
+      label: 'Map Api Key'
+    response_timeout:
+      type: integer
+      label: 'Response timeout'
+    items_per_category:
+      type: integer
+      label: 'Items per category'
+    connection_timeout:
+      type: integer
+      label: 'Connection timeout'
+    map_appid:
+      type: string
+      label: 'Map App ID'
