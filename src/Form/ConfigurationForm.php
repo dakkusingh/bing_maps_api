@@ -131,4 +131,20 @@ class ConfigurationForm extends ConfigFormBase {
     parent::submitForm($form, $form_state);
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  protected function getEditableConfigNames() {
+    return [
+      'response_timeout',
+      'connection_timeout',
+      'items_per_category',
+      'latitude',
+      'longitude',
+      'zoom',
+      'map_key',
+      'map_appid',
+    ];
+  }
+
 }
