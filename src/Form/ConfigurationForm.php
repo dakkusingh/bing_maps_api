@@ -111,7 +111,7 @@ class ConfigurationForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $config = $this->config('bing_maps_api.settings');
+    $config = $this->configFactory()->getEditable('bing_maps_api.settings');
     $field_names = [
       'response_timeout',
       'connection_timeout',
