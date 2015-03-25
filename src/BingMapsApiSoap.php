@@ -8,7 +8,7 @@
 namespace Drupal\bing_maps_api;
 
 use Drupal\Component\Utility\Unicode;
-use Drupal\Component\Utility\String;
+use Drupal\Component\Utility\SafeMarkup;
 
 /**
  * Returns responses for Media entity routes.
@@ -107,7 +107,7 @@ class BingMapsApiSoap extends BingMapsApi {
         <q1:Credentials>
           <q1:ApplicationId>'. $this->config->get('bing_maps_api.settings')->get('map_key', '') . '</q1:ApplicationId>
         </q1:Credentials>
-        <q2:Query>' . String::checkPlain($input) . '</q2:Query>
+        <q2:Query>' . SafeMarkup::checkPlain($input) . '</q2:Query>
         <q2:SearchOptions><q2:Count>' . $this->limit . '</q2:Count></q2:SearchOptions>
       </request>
     </Search>';
@@ -151,7 +151,7 @@ class BingMapsApiSoap extends BingMapsApi {
           <q1:ApplicationId>'. $this->config->get('bing_maps_api.settings')->get('map_key', '') . '</q1:ApplicationId>
         </q1:Credentials>
         <q2:Options><q2:Count>' . $this->limit . '</q2:Count><q2:Filters/></q2:Options>
-        <q2:Query>' . String::checkPlain($input) . '</q2:Query>
+        <q2:Query>' . SafeMarkup::checkPlain($input) . '</q2:Query>
       </request>
     </Geocode>';
     $webservice_result = $client->call('Geocode', $payload);

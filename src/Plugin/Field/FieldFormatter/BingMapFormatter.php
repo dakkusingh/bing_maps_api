@@ -7,7 +7,7 @@
 
 namespace Drupal\bing_maps_api\Plugin\Field\FieldFormatter;
 
-use Drupal\Component\Utility\String;
+use Drupal\Component\Utility\SafeMarkup;
 use Drupal\Core\Field\FormatterBase;
 use Drupal\Core\Field\FieldItemListInterface;
 
@@ -33,7 +33,7 @@ class BingMapFormatter extends FormatterBase {
   public function viewElements(FieldItemListInterface $items) {
     $elements = [];
     foreach ($items as $delta => $item) {
-      $elements[] = array('#markup' => String::checkPlain($item->get('description')->getValue()));
+      $elements[] = array('#markup' => SafeMarkup::checkPlain($item->get('description')->getValue()));
     }
 
     return $elements;

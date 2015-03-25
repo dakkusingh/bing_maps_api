@@ -1,7 +1,7 @@
 <?php
 
 use Drupal\Core\Template\Attribute;
-use Drupal\Component\Utility\String;
+use Drupal\Component\Utility\SafeMarkup;
 
 /**
  * Implements hook_theme().
@@ -34,11 +34,11 @@ function template_preprocess_bing_maps_api_search_item(&$variables) {
     'data-lng' => $variables['item']->get('longitude')->getValue(),
   ];
   $variables['html_attributes'] = new Attribute($attributes);
-  $variables['description'] = String::checkPlain($variables['item']->get('description')->getValue());
+  $variables['description'] = SafeMarkup::checkPlain($variables['item']->get('description')->getValue());
 
   $address = $variables['item']->get('address')->getValue();
   if (!empty($address)) {
-    $variables['address'] = String::checkPlain($address);
+    $variables['address'] = SafeMarkup::checkPlain($address);
   }
 }
 
@@ -56,9 +56,9 @@ function template_preprocess_bing_maps_api_search_item_array(&$variables) {
     'data-lng' => $variables['item']['longitude'],
   ];
   $variables['html_attributes'] = new Attribute($attributes);
-  $variables['description'] = String::checkPlain($variables['item']['description']);
+  $variables['description'] = SafeMarkup::checkPlain($variables['item']['description']);
 
   if (!empty($variables['item']['address'])) {
-    $variables['address'] = String::checkPlain($variables['item']['address']);
+    $variables['address'] = SafeMarkup::checkPlain($variables['item']['address']);
   }
 }
