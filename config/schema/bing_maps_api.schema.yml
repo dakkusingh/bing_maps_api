@@ -1,5 +1,5 @@
 bing_maps_api.settings:
-  type: mapping
+  type: config_object
   label: 'Bing maps API settings'
   mapping:
     latitude:
