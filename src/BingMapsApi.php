@@ -8,7 +8,7 @@
 namespace Drupal\bing_maps_api;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Core\Http\Client;
+use GuzzleHttp\Client;
 use Drupal\Core\Url;
 
 /**
@@ -42,7 +42,7 @@ abstract class BingMapsApi implements BingMapsApiInterface {
   protected $config;
 
   /**
-   * @var \Drupal\Core\Http\Client
+   * @var \GuzzleHttp\Client
    */
   protected $Httpclient;
 
@@ -70,7 +70,7 @@ abstract class BingMapsApi implements BingMapsApiInterface {
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config
    *   Config factory.
-   * @param \Drupal\Core\Http\Client $http_client
+   * @param \GuzzleHttp\Client $http_client
    *   Http client.
    */
   public function __construct(ConfigFactoryInterface $config, Client $http_client) {
