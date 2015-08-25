@@ -10,6 +10,7 @@ namespace Drupal\bing_maps_api;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use GuzzleHttp\Client;
 use Drupal\Core\Url;
+use Drupal\Component\Serialization\Json;
 
 /**
  * Returns responses for Media entity routes.
@@ -92,8 +93,9 @@ abstract class BingMapsApi implements BingMapsApiInterface {
   public static function reverseGeocode($latitude, $longitude) {
     $lookup_results = array();
     $settings = \Drupal::config('bing_maps_api.settings');
-    $response = \Drupal::httpClient()->get(Url::fromUri('http://dev.virtualearth.net/REST/v1/Locations/' . $latitude . ',' . $longitude, ['query' => ['output' => 'json', 'key' => $settings->get('map_key', '')]]), array('timeout' => $settings->get('response_timeout', 10)));
-    if ($response->getStatusCode() == 200 && ($results = $response->json())) {
+    $url = Url::fromUri('http://dev.virtualearth.net/REST/v1/Locations/' . $latitude . ',' . $longitude, ['query' => ['key' => $settings->get('map_key', '')]])->toString();
+    $response = \Drupal::httpClient()->get($url, ['timeout' => $settings->get('response_timeout', 10)]);
+    if ($response->getStatusCode() == 200 && ($results = Json::decode($response->getBody(TRUE)))) {
       if (!empty($results['resourceSets'][0]['resources'])) {
         $lookup_results = $results['resourceSets'][0]['resources'];
       }

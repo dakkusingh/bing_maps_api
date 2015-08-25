@@ -5,8 +5,7 @@
   Drupal.behaviors.bingMapsApi = {
     attach: function(context) {
       var map, $mapElement, infobox, pushPin;
-
-      $('#bing-map').once('bing-map-attach', function() {
+      $('#bing-map').once('bing-map-attach').each(function () {
         var mm = Microsoft.Maps,
           settings = drupalSettings.bingMapsApi,
           $container = $(this).closest('.map-container'),

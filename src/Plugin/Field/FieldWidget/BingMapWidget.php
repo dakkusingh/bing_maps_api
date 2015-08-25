@@ -323,12 +323,12 @@ class BingMapWidget extends WidgetBase implements ContainerFactoryPluginInterfac
         'library' => ['bing_maps_api/drupal.bing_maps_api.external', 'bing_maps_api/drupal.bing_maps_api'],
         'drupalSettings' => [
           'bingMapsApi' => [
-            'key' => $bing_config->get('map_key', ''),
+            'key' => $bing_config->get('map_key'),
             'center' => [
-              'latitude' => $bing_config->get('latitude', 39.74521),
-              'longitude' => $bing_config->get('longitude', -104.988287),
+              'latitude' => $bing_config->get('latitude'),
+              'longitude' => $bing_config->get('longitude'),
             ],
-            'zoom' => $bing_config->get('zoom', 12),
+            'zoom' => $bing_config->get('zoom'),
           ],
         ],
       ],
