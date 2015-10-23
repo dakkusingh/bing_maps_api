@@ -1,6 +1,6 @@
 {
   "name": "drupal-contrib/bing_maps_api",
   "require": {
-    "fergusean/nusoap": "dev-master"
+    "3mg/nusoap": "dev-master"
   }
 }

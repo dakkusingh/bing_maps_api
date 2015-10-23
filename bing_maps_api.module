@@ -9,7 +9,10 @@ function bing_maps_api_theme() {
   return [
     'bing_maps_api_search_item' => [
       'variables' => [
-        'item' => [],
+        'lat' => '',
+        'long' => '',
+        'description' => '',
+        'address' => '',
       ],
     ],
     'bing_maps_api_search_item_array' => [
@@ -29,16 +32,10 @@ function bing_maps_api_theme() {
  */
 function template_preprocess_bing_maps_api_search_item(&$variables) {
   $attributes = [
-    'data-lat' => $variables['item']->get('latitude')->getValue(),
-    'data-lng' => $variables['item']->get('longitude')->getValue(),
+    'data-lat' => $variables['lat'],
+    'data-lng' => $variables['long'],
   ];
   $variables['html_attributes'] = new Attribute($attributes);
-  $variables['description'] = $variables['item']->get('description')->getValue();
-
-  $address = $variables['item']->get('address')->getValue();
-  if (!empty($address)) {
-    $variables['address'] = $address;
-  }
 }
 
 /**

@@ -249,7 +249,10 @@ class BingMapWidget extends WidgetBase implements ContainerFactoryPluginInterfac
     if (!$this->FieldIsEmpty) {
       $fieldset['info'] = [
         '#theme' => 'bing_maps_api_search_item',
-        '#item' => $items[$delta],
+        '#lat' => $items[$delta]->get('latitude')->getValue(),
+        '#long' => $items[$delta]->get('longitude')->getValue(),
+        '#description' => $items[$delta]->get('description')->getValue(),
+        '#address' => $items[$delta]->get('address')->getValue(),
         '#suffix' => '</li></ul>',
       ];
       if ($access) {
@@ -414,7 +417,7 @@ class BingMapWidget extends WidgetBase implements ContainerFactoryPluginInterfac
   /**
    * Ajax callback to determine which part of the form needs rebuilding.
    */
-  public function ajaxFieldEditing(array $form, FormStateInterface $form_state) {
+  public static function ajaxFieldEditing(array $form, FormStateInterface $form_state) {
     $triggering_element = $form_state->getTriggeringElement();
     $length = !empty($triggering_element['#result_type']) ? -3 : -1;
 
@@ -438,7 +441,7 @@ class BingMapWidget extends WidgetBase implements ContainerFactoryPluginInterfac
   /**
    * Validate user input when adding location from the map.
    */
-  public function mapSearchValidate(array $form, FormStateInterface $form_state) {
+  public static function mapSearchValidate(array $form, FormStateInterface $form_state) {
     $triggering_element = $form_state->getTriggeringElement();
     $field_name = $triggering_element['#field_name'];
     $delta = $triggering_element['#delta'];
@@ -467,7 +470,7 @@ class BingMapWidget extends WidgetBase implements ContainerFactoryPluginInterfac
   /**
    * Location remove submit handler.
    */
-  public function removeSubmit($form, FormStateInterface &$form_state) {
+  public static function removeSubmit($form, FormStateInterface &$form_state) {
     $triggering_element = $form_state->getTriggeringElement();
     $form_state->setValue([$triggering_element['#field_name'], $triggering_element['#delta']], []);
   }
