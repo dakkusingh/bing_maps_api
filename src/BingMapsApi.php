@@ -8,7 +8,6 @@
 namespace Drupal\bing_maps_api;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
-use GuzzleHttp\Client;
 use Drupal\Core\Url;
 use Drupal\Component\Serialization\Json;
 
@@ -43,11 +42,6 @@ abstract class BingMapsApi implements BingMapsApiInterface {
   protected $config;
 
   /**
-   * @var \GuzzleHttp\Client
-   */
-  protected $Httpclient;
-
-  /**
    * @var int
    */
   protected $limit;
@@ -56,14 +50,14 @@ abstract class BingMapsApi implements BingMapsApiInterface {
    * @inheritdoc.
    */
   public function phonebookLookup($input) {
-    return array();
+    return [];
   }
 
   /**
    * @inheritdoc.
    */
   public function businessLookup($input) {
-    return array();
+    return [];
   }
 
   /**
@@ -71,12 +65,9 @@ abstract class BingMapsApi implements BingMapsApiInterface {
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config
    *   Config factory.
-   * @param \GuzzleHttp\Client $http_client
-   *   Http client.
    */
-  public function __construct(ConfigFactoryInterface $config, Client $http_client) {
+  public function __construct(ConfigFactoryInterface $config) {
     $this->config = $config;
-    $this->Httpclient = $http_client;
     $this->limit = $this->config->get('bing_maps_api.settings')->get('items_per_category', 10);
   }
 
