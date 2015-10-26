@@ -315,7 +315,12 @@ class BingMapWidget extends WidgetBase implements ContainerFactoryPluginInterfac
       $values = NestedArray::getValue($values, [], $key_exists);
       if ($key_exists) {
         foreach (['latitude', 'longitude', 'description', 'address', 'bing_id', 'source'] as $field_name) {
-          $items[$delta]->get($field_name)->setValue($values[$delta][$field_name]);
+          if (isset($values[$delta][$field_name])) {
+            $items[$delta]->get($field_name)->setValue($values[$delta][$field_name]);
+          }
+          else {
+            $items[$delta]->get($field_name)->setValue('');
+          }
         };
       }
     }
