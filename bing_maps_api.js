@@ -64,7 +64,6 @@
           });
         }
 
-
         /**
          * Shows a location on the map.
          *
@@ -201,6 +200,17 @@
           }
         });
       });
+
+      // Prevent form submit on pressing enter key.
+      var bingSearchButton = $('.button[data-drupal-selector*="bing-location"][data-drupal-selector*="action-search"]');
+      var bingSearchField = $('input[data-drupal-selector*="bing-location"][data-drupal-selector*="user-input"]');
+      bingSearchField.on('keydown', function (e) {
+        if (e.which === 13) {
+          e.preventDefault();
+          bingSearchButton.mousedown();
+        }
+      });
+
     }
   };
 
