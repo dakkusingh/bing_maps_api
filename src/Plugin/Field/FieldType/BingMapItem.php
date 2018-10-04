@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\bing_maps_api\Plugin\Field\FieldType\BingMapItem.
- */
-
 namespace Drupal\bing_maps_api\Plugin\Field\FieldType;
 
 use Drupal\Core\Field\FieldItemBase;
@@ -70,8 +65,8 @@ class BingMapItem extends FieldItemBase {
         'description' => 'Optional Bing location ID.',
       ],
       // Required field which stores the selected location's source. It can come
-      // from either business lookup, phonebook lookup, address lookup or the user
-      // might have picked a location from the map.
+      // from either business lookup, phonebook lookup, address lookup or the
+      // user might have picked a location from the map.
       'source' => [
         'type' => 'int',
         'size' => 'tiny',
@@ -96,7 +91,7 @@ class BingMapItem extends FieldItemBase {
   /**
    * {@inheritdoc}
    */
-  static $propertyDefinitions;
+  public static $propertyDefinitions;
 
   /**
    * {@inheritdoc}

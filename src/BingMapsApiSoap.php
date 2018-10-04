@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\bing_maps_api\BingMapsApiSoap.
- */
-
 namespace Drupal\bing_maps_api;
 
 use Drupal\Component\Utility\Unicode;
@@ -16,7 +11,9 @@ use Drupal\Component\Utility\Html;
 class BingMapsApiSoap extends BingMapsApi {
 
   /**
-   * @var array of \nusoap_client.
+   * Soap Client.
+   *
+   * @var arrayof\nusoap_client
    */
   protected $soapClients = [];
 
@@ -25,6 +22,9 @@ class BingMapsApiSoap extends BingMapsApi {
    *
    * @param string $url
    *   Url to process.
+   *
+   * @return string
+   *   Processed Url.
    */
   protected function createClient($url) {
     if (!isset($this->soapClients[$url])) {
@@ -43,14 +43,15 @@ class BingMapsApiSoap extends BingMapsApi {
   }
 
   /**
-   * @inheritdoc.
+   * {@inheritdoc}
    */
   public function phonebookLookup($input) {
     $lookup_results = [];
     $client = $this->createClient('http://api.bing.net/search.wsdl?Version=2.2');
 
     $request_params = [
-      'Query' => $input, // nusoap will escape it
+    // Nusoap will escape it.
+      'Query' => $input,
       'AppId' => $this->config->get('bing_maps_api.settings')->get('map_appid', ''),
       'Sources' => ['SourceType' => ['PhoneBook']],
       'Phonebook' => ['Count' => $this->limit],
@@ -63,10 +64,10 @@ class BingMapsApiSoap extends BingMapsApi {
     // Nusoap will create the XML as <parameters>...</parameters> but Bing seems
     // to expect the <SearchRequest><parameters>...</parameters></SearchRequest>
     // format, so, we'll force this structure in the payload.
-    // serializeRPCParameters() takes care of the parameters, then we slap on the
-    // necessary tag. The reason this works is, that call() is not going to
+    // serializeRPCParameters() takes care of the parameters, then we slap on
+    // the necessary tag. The reason this works is, that call() is not going to
     // transform string variables.
-    $soap_payload = $client->wsdl->serializeRPCParameters('Search', 'input', array('parameters' => $request_processed), $client->bindingType);
+    $soap_payload = $client->wsdl->serializeRPCParameters('Search', 'input', ['parameters' => $request_processed], $client->bindingType);
     $soap_payload = '<SearchRequest>' . $soap_payload . '</SearchRequest>';
     $webservice_result = $client->call('Search', $soap_payload);
     if (!empty($webservice_result['parameters']['Phonebook']['Results']['PhonebookResult']) && ($results = $this->ensureResultStructure($webservice_result['parameters']['Phonebook']['Results']['PhonebookResult']))) {
@@ -87,7 +88,7 @@ class BingMapsApiSoap extends BingMapsApi {
   }
 
   /**
-   * @inheritdoc.
+   * {@inheritdoc}
    */
   public function businessLookup($input) {
     $lookup_results = [];
@@ -105,7 +106,7 @@ class BingMapsApiSoap extends BingMapsApi {
     <Search ' . implode(' ', $namespaces) . '>
       <request>
         <q1:Credentials>
-          <q1:ApplicationId>'. $this->config->get('bing_maps_api.settings')->get('map_key', '') . '</q1:ApplicationId>
+          <q1:ApplicationId>' . $this->config->get('bing_maps_api.settings')->get('map_key', '') . '</q1:ApplicationId>
         </q1:Credentials>
         <q2:Query>' . Html::escape($input) . '</q2:Query>
         <q2:SearchOptions><q2:Count>' . $this->limit . '</q2:Count></q2:SearchOptions>
@@ -130,10 +131,10 @@ class BingMapsApiSoap extends BingMapsApi {
   }
 
   /**
-   * @inheritdoc.
+   * {@inheritdoc}
    */
   public function geocodeLookup($input) {
-    $lookup_results = array();
+    $lookup_results = [];
     $client = $this->createClient('http://dev.virtualearth.net/webservices/v1/metadata/geocodeservice/geocodeservice.wsdl');
 
     // Nusoap is not using namespace prefixes for elements which is freaking out
@@ -148,7 +149,7 @@ class BingMapsApiSoap extends BingMapsApi {
     <Geocode ' . implode(' ', $namespaces) . ' xsi:type="i0:Geocode">
       <request>
         <q1:Credentials>
-          <q1:ApplicationId>'. $this->config->get('bing_maps_api.settings')->get('map_key', '') . '</q1:ApplicationId>
+          <q1:ApplicationId>' . $this->config->get('bing_maps_api.settings')->get('map_key', '') . '</q1:ApplicationId>
         </q1:Credentials>
         <q2:Options><q2:Count>' . $this->limit . '</q2:Count><q2:Filters/></q2:Options>
         <q2:Query>' . Html::escape($input) . '</q2:Query>
@@ -182,14 +183,15 @@ class BingMapsApiSoap extends BingMapsApi {
    *   Processed results.
    */
   protected function ensureResultStructure($soap_result_structure) {
-    $results = array();
+    $results = [];
     if (is_array($soap_result_structure)) {
       // Bing sometimes provides an array of results and sometime just an array
       // which IS the result... Cute isn't it ? So if the array key is numeric
-      // then let's assume we have an array of results. Otherwise assume that the
-      // variable is one result, so push it into an array.
+      // then let's assume we have an array of results. Otherwise assume that
+      // the variable is one result, so push it into an array.
       $results = is_numeric(key($soap_result_structure)) ? $soap_result_structure : [$soap_result_structure];
     }
     return $results;
   }
+
 }

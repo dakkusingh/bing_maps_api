@@ -1,12 +1,6 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\bing_maps_api\BingMapsApiInterface.
- */
-
 namespace Drupal\bing_maps_api;
-
 
 /**
  * Defines the interface for BingMapsApi.
@@ -19,7 +13,7 @@ interface BingMapsApiInterface {
    * @param string $input
    *   Term to search for.
    *
-   * @return
+   * @return array
    *   Array of search results.
    */
   public function phonebookLookup($input);
@@ -30,7 +24,7 @@ interface BingMapsApiInterface {
    * @param string $input
    *   Term to search for.
    *
-   * @return
+   * @return array
    *   Array of search results.
    */
   public function businessLookup($input);
@@ -41,20 +35,20 @@ interface BingMapsApiInterface {
    * @param string $input
    *   Term to search for.
    *
-   * @return
+   * @return array
    *   Array of search results.
    */
   public function geocodeLookup($input);
 
   /**
-   * everse Geocode lookup using Bing REST service.
+   * Everse Geocode lookup using Bing REST service.
    *
    * @param string $latitude
    *   Latitude.
    * @param string $longitude
    *   Latitude.
    *
-   * @return
+   * @return array
    *   Array of search results.
    */
   public static function reverseGeocode($latitude, $longitude);

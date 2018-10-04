@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\bing_maps_api\Plugin\Field\FieldFormatter\BingMapFormatter.
- */
-
 namespace Drupal\bing_maps_api\Plugin\Field\FieldFormatter;
 
 use Drupal\Core\Field\FormatterBase;
@@ -31,8 +26,8 @@ class BingMapFormatter extends FormatterBase {
    */
   public function viewElements(FieldItemListInterface $items, $langcode) {
     $elements = [];
-    foreach ($items as $delta => $item) {
-      $elements[] = array('#plain_text' => $item->get('description')->getValue());
+    foreach ($items as $item) {
+      $elements[] = ['#plain_text' => $item->get('description')->getValue()];
     }
 
     return $elements;

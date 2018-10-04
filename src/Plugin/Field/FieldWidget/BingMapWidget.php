@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \rupal\bing_maps_api\Field\Plugin\Field\FieldWidget\BingMapWidget.
- */
-
 namespace Drupal\bing_maps_api\Plugin\Field\FieldWidget;
 
 use Drupal\Component\Utility\NestedArray;
@@ -35,22 +30,22 @@ class BingMapWidget extends WidgetBase implements ContainerFactoryPluginInterfac
   /**
    * Widget is operating in edit mode.
    */
-  const edit = 1;
+  const EDIT = 1;
 
   /**
    * Widget is operating in search mode.
    */
-  const search = 2;
+  const SEARCH = 2;
 
   /**
    * Is the field empty.
    *
-   * @var bool.
+   * @var bool
    */
   protected $FieldIsEmpty;
 
   /**
-   * Config factory
+   * Config factory.
    *
    * @var \Drupal\Core\Config\ConfigFactoryInterface
    */
@@ -59,7 +54,7 @@ class BingMapWidget extends WidgetBase implements ContainerFactoryPluginInterfac
   /**
    * Constructs a bing maps object.
    *
-   * @param array $plugin_id
+   * @param string $plugin_id
    *   The plugin_id for the widget.
    * @param mixed $plugin_definition
    *   The plugin implementation definition.
@@ -74,8 +69,18 @@ class BingMapWidget extends WidgetBase implements ContainerFactoryPluginInterfac
    * @param \Drupal\bing_maps_api\BingMapsApiInterface $bing_maps_api
    *   Bing maps api.
    */
-  public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, array $third_party_settings, ConfigFactoryInterface $config, BingMapsApiInterface $bing_maps_api) {
-    parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $third_party_settings);
+  public function __construct($plugin_id,
+                              $plugin_definition,
+                              FieldDefinitionInterface $field_definition,
+                              array $settings,
+                              array $third_party_settings,
+                              ConfigFactoryInterface $config,
+                              BingMapsApiInterface $bing_maps_api) {
+    parent::__construct($plugin_id,
+                        $plugin_definition,
+                        $field_definition,
+                        $settings,
+                        $third_party_settings);
     $this->config = $config;
     $this->bingMapApi = $bing_maps_api;
   }
@@ -83,7 +88,10 @@ class BingMapWidget extends WidgetBase implements ContainerFactoryPluginInterfac
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+  public static function create(ContainerInterface $container,
+                                array $configuration,
+                                $plugin_id,
+                                $plugin_definition) {
     return new static(
       $plugin_id,
       $plugin_definition,
@@ -112,8 +120,8 @@ class BingMapWidget extends WidgetBase implements ContainerFactoryPluginInterfac
    * their definition which will be available at submit time.
    *
    * The buttons will sometimes have a custom #name set because, when we show
-   * results and buttons for a selection, the buttons will have the same name and
-   * we want to be able to differentiate between the buttons.
+   * results and buttons for a selection, the buttons will have the same name
+   * and we want to be able to differentiate between the buttons.
    */
   protected function editingForm(array &$fieldset, array $form, FormStateInterface $form_state, FieldItemListInterface $items, $delta) {
     // Wrap all the fields for one $delta into a fieldset.
@@ -133,7 +141,7 @@ class BingMapWidget extends WidgetBase implements ContainerFactoryPluginInterfac
     // Search results (hidden by default).
     $fieldset['result-area'] = [
       '#type' => 'fieldset',
-      '#attached' => array(),
+      '#attached' => [],
       '#title' => $this->t('Locations'),
       '#attributes' => ['class' => ['visually-hidden', 'bing-location-results']],
       '#weight' => 998,
@@ -148,7 +156,7 @@ class BingMapWidget extends WidgetBase implements ContainerFactoryPluginInterfac
       '#weight' => 998,
       '#access' => $access,
       // Prevent a fatal as we seem to lack a #attached property.
-      '#attached' => array(),
+      '#attached' => [],
       'add_button' => [
         '#type' => 'submit',
         '#value' => $this->t('Add Location'),
@@ -220,7 +228,10 @@ class BingMapWidget extends WidgetBase implements ContainerFactoryPluginInterfac
           'progress' => ['type' => 'throbber', 'message' => ''],
         ],
         '#limit_validation_errors' => [$parents],
-        '#submit' => [[get_class($this), 'editingSubmit'], [get_class($this), 'removeSubmit']],
+        '#submit' => [
+          [get_class($this), 'editingSubmit'],
+          [get_class($this), 'removeSubmit'],
+        ],
         '#field_name' => $this->fieldDefinition->getName(),
         '#delta' => $delta,
         '#prefix' => '<ul class="location-current location-results"><li class="last">',
@@ -271,7 +282,7 @@ class BingMapWidget extends WidgetBase implements ContainerFactoryPluginInterfac
     ];
     $fieldset['action_search'] = [
       '#type' => 'submit',
-      '#value' => t('Search'),
+      '#value' => $this->t('Search'),
       '#name' => implode('_', $parents) . '_search_button',
       '#access' => $access,
       '#ajax' => [
@@ -306,15 +317,33 @@ class BingMapWidget extends WidgetBase implements ContainerFactoryPluginInterfac
   /**
    * {@inheritdoc}
    */
-  public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state) {
+  public function formElement(FieldItemListInterface $items,
+                              $delta,
+                              array $element,
+                              array &$form,
+                              FormStateInterface $form_state) {
     // Retrieve any values set in $form_state, as will be the case during AJAX
     // rebuilds of this form.
-    $values = $form_state->getValue(array_merge($element['#field_parents'], [$this->fieldDefinition->getName()]));
+    $values = $form_state->getValue(array_merge(
+      $element['#field_parents'],
+      [$this->fieldDefinition->getName()]
+    ));
+
+    $props = [
+      'latitude',
+      'longitude',
+      'description',
+      'address',
+      'bing_id',
+      'source',
+    ];
+
     if (!empty($values)) {
       $key_exists = FALSE;
       $values = NestedArray::getValue($values, [], $key_exists);
+
       if ($key_exists) {
-        foreach (['latitude', 'longitude', 'description', 'address', 'bing_id', 'source'] as $field_name) {
+        foreach ($props as $field_name) {
           if (isset($values[$delta][$field_name])) {
             $items[$delta]->get($field_name)->setValue($values[$delta][$field_name]);
           }
@@ -341,13 +370,14 @@ class BingMapWidget extends WidgetBase implements ContainerFactoryPluginInterfac
         ],
       ],
     ];
-    foreach (['latitude', 'longitude', 'description', 'address', 'bing_id', 'source'] as $field_name) {
+    foreach ($props as $field_name) {
       $fieldset[$field_name] = [
         '#type' => 'value',
         '#value' => $items[$delta]->get($field_name)->getValue(),
       ] + $element;
     }
-    // Put the current field value info and the elements for editing into $fieldset.
+    // Put the current field value info and the elements for
+    // editing into $fieldset.
     $this->editingForm($fieldset, $form, $form_state, $items, $delta);
     // Pushing the search result listing into $fieldset.
     $this->searchResults($fieldset, $form, $form_state, $delta);
@@ -357,13 +387,23 @@ class BingMapWidget extends WidgetBase implements ContainerFactoryPluginInterfac
   /**
    * Add the search result listing to the field widget form.
    */
-  protected function searchResults(&$fieldset, array $form, FormStateInterface $form_state, $delta) {
+  protected function searchResults(&$fieldset,
+                                   array $form,
+                                   FormStateInterface $form_state,
+                                   $delta) {
     $triggering_element = $form_state->getTriggeringElement();
     if (isset($triggering_element['#editing_state']) && $triggering_element['#editing_state'] == $this::search) {
       // Limit validation error param.
       $parents = array_merge($form['#parents'], [$this->fieldDefinition->getName(), $delta]);
 
-      $input = $form_state->getValue([$this->fieldDefinition->getName(), $delta, 'user_input']);
+      $input = $form_state->getValue(
+        [
+          $this->fieldDefinition->getName(),
+          $delta,
+          'user_input',
+        ]
+      );
+
       $search_results[BingMapsApi::ADDRESS] = $this->bingMapApi->geocodeLookup($input);
       $search_results[BingMapsApi::POINT_OF_INTEREST] = $this->bingMapApi->businessLookup($input);
       $search_results[BingMapsApi::PHONEBOOK] = $this->bingMapApi->phonebookLookup($input);
@@ -483,17 +523,17 @@ class BingMapWidget extends WidgetBase implements ContainerFactoryPluginInterfac
   /**
    * Widget AJAX submit function.
    *
-   * Force form rebuilding so the form changes, like #access control, can show up
-   * on the UI and that the correct setting is participating in the submit /
+   * Force form rebuilding so the form changes, like #access control, can show
+   * up on the UI and that the correct setting is participating in the submit /
    * validate / value process.
    *
-   * This is where we store the selected location. The user can select a location
-   * from the search services or by picking a place on the map. In the former case
-   * the results have been already stored in the form state and the pressed button
-   * has the information which was picked so all we need to is to push the
-   * selected item into the right place. In the latter case the location info is
-   * coming as input and need to follow up on reverse geocode service to get
-   * address if there's any.
+   * This is where we store the selected location. The user can select a
+   * location from the search services or by picking a place on the map.
+   * In the former case the results have been already stored in the form state
+   * and the pressed button has the information which was picked so all we
+   * need to is to push the selected item into the right place.
+   * In the latter case the location info is coming as input and need to follow
+   * up on reverse geocode service to get address if there's any.
    */
   public static function editingSubmit(array $form, FormStateInterface $form_state) {
     $triggering_element = $form_state->getTriggeringElement();
@@ -504,7 +544,15 @@ class BingMapWidget extends WidgetBase implements ContainerFactoryPluginInterfac
       $result_type = $triggering_element['#result_type'];
       if ($result_type == BingMapsApi::PIN_POINT) {
         // User selected location using the map.
-        $data = $form_state->getValue([$field_name, $delta, 'result-area', 'dynamic']);
+        $data = $form_state->getValue(
+          [
+            $field_name,
+            $delta,
+            'result-area',
+            'dynamic',
+          ]
+        );
+
         $latlong = array_filter(array_map('trim', explode(',', $data['latlong'])));
         $addresses = BingMapsApi::reverseGeocode($latlong[0], $latlong[1]);
         $form_state->setValue([$field_name, $delta, 'latitude'], (float) $latlong[0]);
@@ -517,8 +565,26 @@ class BingMapWidget extends WidgetBase implements ContainerFactoryPluginInterfac
       else {
         // User selected location from the search services.
         $result_delta = $triggering_element['#result_delta'];
-        $value = $form_state->getValue([$field_name, $delta, 'temporary_result_container', $result_type, $result_delta]);
-        foreach (['latitude', 'longitude', 'description', 'address', 'bing_id', 'source'] as $field_item) {
+        $value = $form_state->getValue(
+          [
+            $field_name,
+            $delta,
+            'temporary_result_container',
+            $result_type,
+            $result_delta,
+          ]
+        );
+
+        $props = [
+          'latitude',
+          'longitude',
+          'description',
+          'address',
+          'bing_id',
+          'source',
+        ];
+
+        foreach ($props as $field_item) {
           $form_state->setValue([$field_name, $delta, $field_item], $value[$field_item]);
         }
       }
@@ -528,7 +594,10 @@ class BingMapWidget extends WidgetBase implements ContainerFactoryPluginInterfac
   /**
    * {@inheritdoc}
    */
-  public function errorElement(array $element, ConstraintViolationInterface $violation, array $form, FormStateInterface $form_state) {
+  public function errorElement(array $element,
+                               ConstraintViolationInterface $violation,
+                               array $form,
+                               FormStateInterface $form_state) {
     return $element['value'];
   }
 

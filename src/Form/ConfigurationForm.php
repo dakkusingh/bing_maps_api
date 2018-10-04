@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\bing_maps_api\Form\ConfigurationForm.
- */
-
 namespace Drupal\bing_maps_api\Form;
 
 use Drupal\Core\Form\FormStateInterface;
@@ -45,18 +40,18 @@ class ConfigurationForm extends ConfigFormBase {
       '#default_value' => $config->get('longitude'),
       '#required' => TRUE,
     ];
-    $form['bing_map_map_defaults']['zoom'] = array(
+    $form['bing_map_map_defaults']['zoom'] = [
       '#type' => 'select',
-      '#options' => array_combine(range(1,12),range(1,12)),
+      '#options' => array_combine(range(1, 12), range(1, 12)),
       '#title' => $this->t('Default zoom'),
       '#default_value' => $config->get('zoom'),
       '#required' => TRUE,
-    );
-    $form['bing_map_api'] = array(
+    ];
+    $form['bing_map_api'] = [
       '#type' => 'details',
       '#title' => $this->t('Api Settings'),
       '#open' => TRUE,
-    );
+    ];
     $form['bing_map_api']['map_key'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Map key'),
@@ -100,7 +95,7 @@ class ConfigurationForm extends ConfigFormBase {
   public function validateForm(array &$form, FormStateInterface $form_state) {
     foreach (['latitude', 'longitude'] as $field) {
       if (($value = $form_state->getValue($field)) && !is_numeric($value)) {
-        $form_state->setErrorByName($field, t('Please enter a numeric value.'));
+        $form_state->setErrorByName($field, $this->t('Please enter a numeric value.'));
       }
     }
 

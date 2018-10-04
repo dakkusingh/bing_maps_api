@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\bing_maps_api\BingMapsApi.
- */
-
 namespace Drupal\bing_maps_api;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -37,28 +32,18 @@ abstract class BingMapsApi implements BingMapsApiInterface {
   const PHONEBOOK = 4;
 
   /**
+   * ConfigFactoryInterface.
+   *
    * @var \Drupal\Core\Config\ConfigFactoryInterface
    */
   protected $config;
 
   /**
+   * Limit.
+   *
    * @var int
    */
   protected $limit;
-
-  /**
-   * @inheritdoc.
-   */
-  public function phonebookLookup($input) {
-    return [];
-  }
-
-  /**
-   * @inheritdoc.
-   */
-  public function businessLookup($input) {
-    return [];
-  }
 
   /**
    * Constructs a bing maps object.
@@ -72,17 +57,31 @@ abstract class BingMapsApi implements BingMapsApiInterface {
   }
 
   /**
-   * @inheritdoc.
+   * {@inheritdoc}
    */
-  public function geocodeLookup($input) {
-    return array();
+  public function phonebookLookup($input) {
+    return [];
   }
 
   /**
-   * @inheritdoc.
+   * {@inheritdoc}
+   */
+  public function businessLookup($input) {
+    return [];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function geocodeLookup($input) {
+    return [];
+  }
+
+  /**
+   * {@inheritdoc}
    */
   public static function reverseGeocode($latitude, $longitude) {
-    $lookup_results = array();
+    $lookup_results = [];
     $settings = \Drupal::config('bing_maps_api.settings');
     $url = Url::fromUri('http://dev.virtualearth.net/REST/v1/Locations/' . $latitude . ',' . $longitude, ['query' => ['key' => $settings->get('map_key', '')]])->toString();
     $response = \Drupal::httpClient()->get($url, ['timeout' => $settings->get('response_timeout', 10)]);
@@ -93,4 +92,5 @@ abstract class BingMapsApi implements BingMapsApiInterface {
     }
     return $lookup_results;
   }
+
 }
